@@ -44,6 +44,7 @@ class SVC:
         self.gamma = gamma
         self.d = d
         self.gamma_type = gamma_type
+        self.w_sub_gradient = []
 
     def fit(self, X, y):
         '''
@@ -81,9 +82,15 @@ class SVC:
                                                           self.N *
                                                           y_i *
                                                           x_i.T)
-                self.t += 1
+
             else:
                 self.w = (1 - self.gamma_t()) * self.w
+
+            self.t += 1
+            self.w_sub_gradient.append(self.w - (self.C *
+                                              self.N *
+                                              y_i *
+                                              x_i.T))
 
     def shuffle(self, X, y):
         df = X
@@ -91,7 +98,7 @@ class SVC:
         df.sample(frac=1)
 
         X = df.drop(['y'], axis=1)
-        X.insert(loc=0, column='bias', value=np.zeros((X.shape[0])))
+        X.insert(loc=0, column='bias', value=np.ones((X.shape[0])))
         X = np.matrix(X)
 
         y = df['y']
@@ -136,6 +143,9 @@ class SVC:
             self.gamma = 1 / self.X.shape[1]
         if self.gamma_type == 1:
             gamma_t = self.gamma / (1 + self.gamma / self.d * self.t)
+        if self.gamma_type == 'special':
+            self.gamma = .01
+            gamma_t = self.gamma/(2 * (self.t+1))
         else:
             gamma_t = self.gamma / (1 + self.t)
         return gamma_t
@@ -167,9 +177,9 @@ class SVC:
         
 
 if __name__ == '__main__':
-    Xx = pd.DataFrame([[1, 2, 3], [2, 3, 4], [3, 4, 5], [9, 1, 2]])
-    yy = pd.Series([-1, 1, 1, 1])
-    svc = SVC()
+    Xx = pd.DataFrame([[0.5, -1, 0.3], [-1, -2, -2], [1.5, 0.2, -2.5]])
+    yy = pd.Series([1, -1, 1])
+    svc = SVC(gamma_type='special')
     svc.fit(Xx, yy)
 
 

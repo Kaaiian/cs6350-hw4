@@ -45,7 +45,7 @@ for value in C:
 print('\n3. part b')
 errors_b = []
 for value in C:
-    svc = SVC(C=value, gamma_type=2, max_epochs=50, gamma=0.1, d=0.10)
+    svc = SVC(C=value, gamma_type=2, max_epochs=50, gamma=0.1, d=0.15)
     svc.fit(X_train, y_train)
 
     y_predict = svc.predict(X_test)
