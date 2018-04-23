@@ -22,10 +22,14 @@ class SVC:
     C : float, optional (default=1)
         Penalty parameter C of the error term.
 
+    gamma_type : int, optional (default=1)
+        if gamma_type=1 then gamma_t = gamma / (1 + gamma * t / d),
+        otherwise gamma_t = gamma / (1 + t)
+
     gamma : float, optional (default='auto')
         if gamma is 'auto' then 1/n features will be used
 
-    d: float, optional (default = 1)
+    d : float, optional (default = 1)
 
     Attributes :
     ------------------------
