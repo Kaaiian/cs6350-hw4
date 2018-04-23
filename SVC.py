@@ -38,7 +38,7 @@ class SVC:
 
     intecept_ : float
     '''
-    def __init__(self, max_epochs=10, C=1.0, gamma_type=1, gamma='auto', d=1):
+    def __init__(self, max_epochs=50, C=1.0, gamma_type=1, gamma='auto', d=1):
         self.max_epochs = max_epochs
         self.C = C
         self.gamma = gamma
@@ -62,7 +62,6 @@ class SVC:
         y = np.sign(self.y)
         self.w = np.zeros((self.X.shape[1] + 1, 1))
         self.N = self.X.shape[0]
-        self.t = 0
 
         for n in range(self.max_epochs):
             self.epoch()
@@ -74,6 +73,8 @@ class SVC:
         X = self.X.copy()
         y = self.y.copy()
         X, y = self.shuffle(X, y)
+
+        self.t = 0
 
         for x_i, y_i in zip(X, y):
             if y_i*self.w.T*x_i.T <= 1:
@@ -88,9 +89,9 @@ class SVC:
 
             self.t += 1
             self.w_sub_gradient.append(self.w - (self.C *
-                                              self.N *
-                                              y_i *
-                                              x_i.T))
+                                                 self.N *
+                                                 y_i *
+                                                 x_i.T))
 
     def shuffle(self, X, y):
         df = X
@@ -141,11 +142,12 @@ class SVC:
         '''
         if self.gamma == 'auto':
             self.gamma = 1 / self.X.shape[1]
+
         if self.gamma_type == 1:
-            gamma_t = self.gamma / (1 + self.gamma / self.d * self.t)
-        if self.gamma_type == 'special':
+            gamma_t = self.gamma / (1 + (self.gamma / self.d * self.t))
+        elif self.gamma_type == 'special':
             self.gamma = .01
-            gamma_t = self.gamma/(2 * (self.t+1))
+            gamma_t = self.gamma/(2 * (self.t + 1))
         else:
             gamma_t = self.gamma / (1 + self.t)
         return gamma_t
@@ -163,7 +165,7 @@ class SVC:
         prediction : array-like, shape (n_samples)
         '''
         X = X.copy()
-        X.insert(loc=0, column='bias', value=np.zeros((X.shape[0])))
+        X.insert(loc=0, column='bias', value=np.ones((X.shape[0])))
         X = np.matrix(X).T
         prediction = np.array(np.sign(self.w.T * X).T).ravel()
         return prediction

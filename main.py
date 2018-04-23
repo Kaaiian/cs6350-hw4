@@ -31,7 +31,7 @@ print('\n\n--------------\nHOMEWORK 4\n--------------')
 print('\n3. part a')
 errors_a = []
 for value in C:
-    svc = SVC(C=value, gamma_type=1, max_epochs=50, gamma=0.1, d=0.150)
+    svc = SVC(C=value, gamma_type=1, max_epochs=50, gamma=0.1, d=0.15)
     svc.fit(X_train, y_train)
 
     y_predict = svc.predict(X_test)
