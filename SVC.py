@@ -181,7 +181,7 @@ class SVC:
 if __name__ == '__main__':
     Xx = pd.DataFrame([[0.5, -1, 0.3], [-1, -2, -2], [1.5, 0.2, -2.5]])
     yy = pd.Series([1, -1, 1])
-    svc = SVC(gamma_type='special')
+    svc = SVC(gamma_type='special', C=1)
     svc.fit(Xx, yy)
 
 

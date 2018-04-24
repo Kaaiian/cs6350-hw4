@@ -62,4 +62,6 @@ for err_a, err_b in zip(errors_a, errors_b):
     print('\nweight vector differences:\n' + str(diff.ravel()))
     print('--------------------------------------------------\n\t' \
           'test error differences:', str.format('{0:.4f}', err_a[1]-err_b[1]))
-
+print('\n-----**************************************************-----\n'
+      'We can conclude that for this data, there is no significant difference'
+      ' between the two learning rates')
